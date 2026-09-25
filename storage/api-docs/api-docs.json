@@ -1,0 +1,882 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Jatidiri APP",
+        "description": "Dokumentasi API Jatidiri App",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/post": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Ambil daftar post",
+                "operationId": "6c43f6f6bcd1344b5a65c0432ca660dc",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan judul atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar post"
+                    }
+                }
+            }
+        },
+        "/api/post/{slug}": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Ambil detail post berdasarkan slug",
+                "operationId": "44bbb1afa19ff8062fe41f17aa442cdf",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari post",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data post"
+                    },
+                    "404": {
+                        "description": "Post tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/agenda": {
+            "get": {
+                "tags": [
+                    "Agenda"
+                ],
+                "summary": "Ambil daftar agenda",
+                "operationId": "683a31570216278fb7fd361d142476b5",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan judul atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar agenda"
+                    }
+                }
+            }
+        },
+        "/api/agenda/{slug}": {
+            "get": {
+                "tags": [
+                    "Agenda"
+                ],
+                "summary": "Ambil detail agenda berdasarkan slug",
+                "operationId": "df3a2f1202a3ee577a47c372290108b2",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari Agenda",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data agenda"
+                    },
+                    "404": {
+                        "description": "Post tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/program": {
+            "get": {
+                "tags": [
+                    "Program"
+                ],
+                "summary": "Ambil daftar program",
+                "operationId": "3c688e9cf7a5aa68d49ebaa41f35b099",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar agenda"
+                    }
+                }
+            }
+        },
+        "/api/program/{slug}": {
+            "get": {
+                "tags": [
+                    "Program"
+                ],
+                "summary": "Ambil detail program berdasarkan slug",
+                "operationId": "c25be071f7ccd393d7539c9e371133f7",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari Program",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data program"
+                    },
+                    "404": {
+                        "description": "Program tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/unggulan": {
+            "get": {
+                "tags": [
+                    "Unggulan"
+                ],
+                "summary": "Ambil daftar Unggulan",
+                "operationId": "d5ca05d31fdd70727e44a825740e6767",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar Unggulan"
+                    }
+                }
+            }
+        },
+        "/api/unggulan/{slug}": {
+            "get": {
+                "tags": [
+                    "Unggulan"
+                ],
+                "summary": "Ambil detail unggulan berdasarkan slug",
+                "operationId": "47a5804e3871ec20495d970c2aa77285",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari unggulan",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data unggulan"
+                    },
+                    "404": {
+                        "description": "unggulan tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/assesment": {
+            "get": {
+                "tags": [
+                    "Assesment"
+                ],
+                "summary": "Ambil daftar assesment",
+                "operationId": "e11ad8884250c36686f19e1781b8d4a2",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar assesment"
+                    }
+                }
+            }
+        },
+        "/api/assesment/{slug}": {
+            "get": {
+                "tags": [
+                    "Assesment"
+                ],
+                "summary": "Ambil detail assesment berdasarkan slug",
+                "operationId": "4a0e3db3fabfc007ab4d396f7732276a",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari assesment",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data assesment"
+                    },
+                    "404": {
+                        "description": "assesment tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/pricing": {
+            "get": {
+                "tags": [
+                    "Pricing"
+                ],
+                "summary": "Ambil daftar pricing",
+                "operationId": "2cfdf0078a331c65d1e6e8e543fed4e8",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau isi dan harga",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar pricing"
+                    }
+                }
+            }
+        },
+        "/api/pricing/{slug}": {
+            "get": {
+                "tags": [
+                    "Pricing"
+                ],
+                "summary": "Ambil detail pricing berdasarkan slug",
+                "operationId": "96fc6b275733d7f5e5ed72112bed730a",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari pricing",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data pricing"
+                    },
+                    "404": {
+                        "description": "pricing tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/benefit": {
+            "get": {
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Ambil daftar benefit",
+                "operationId": "c10fcd522343edcab7d5f67bb015714d",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan title atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar benefit"
+                    }
+                }
+            }
+        },
+        "/api/benefit/{slug}": {
+            "get": {
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Ambil detail benefit berdasarkan slug",
+                "operationId": "86a4a44d7531883423dc30719e8fd82c",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari benefit",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data benefit"
+                    },
+                    "404": {
+                        "description": "benefit tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/benefit-assesment/{id}": {
+            "get": {
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Ambil benefit berdasarkan Assesment (facility_id)",
+                "operationId": "3e4d6d5b329c96b9e1695e2eaaff75fe",
+                "parameters": [
+                    {
+                        "name": "id assesment (facility_id)",
+                        "in": "path",
+                        "description": "Id dari Assesment (facility_id)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data benefit"
+                    },
+                    "404": {
+                        "description": "benefit tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/testimoni": {
+            "get": {
+                "tags": [
+                    "Testimoni"
+                ],
+                "summary": "Ambil daftar testimoni",
+                "operationId": "5737da63dc7468cdbb8025ed59faa1b4",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name, title atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar testimoni"
+                    }
+                }
+            }
+        },
+        "/api/testimoni/{slug}": {
+            "get": {
+                "tags": [
+                    "Testimoni"
+                ],
+                "summary": "Ambil detail testimoni berdasarkan slug",
+                "operationId": "09be32f11b7020a7c68020f2b9b21702",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari testimoni",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data testimoni"
+                    },
+                    "404": {
+                        "description": "testimoni tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/portofolio": {
+            "get": {
+                "tags": [
+                    "Portofolio"
+                ],
+                "summary": "Ambil daftar portofolio",
+                "operationId": "cc286b1ab2ba3150de2b2d0fa7942354",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan title atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar portofolio"
+                    }
+                }
+            }
+        },
+        "/api/portofolio/{slug}": {
+            "get": {
+                "tags": [
+                    "Portofolio"
+                ],
+                "summary": "Ambil detail portofolio berdasarkan slug",
+                "operationId": "3815b0fbd74918d4fb65f760c96fc42e",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari portofolio",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data portofolio"
+                    },
+                    "404": {
+                        "description": "portofolio tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/support": {
+            "get": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Ambil daftar Support",
+                "operationId": "b40181315a43c19f36514daa7fabaf0c",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan title atau name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar Support"
+                    }
+                }
+            }
+        },
+        "/api/support/{slug}": {
+            "get": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Ambil detail Support berdasarkan slug",
+                "operationId": "b3ebdee642fa3f582e33aa8040fde9fb",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari Support",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data Support"
+                    },
+                    "404": {
+                        "description": "Support tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/partner": {
+            "get": {
+                "tags": [
+                    "Partner"
+                ],
+                "summary": "Ambil daftar Partner",
+                "operationId": "0415af3563b10ee18e599c49af6625f7",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar Partner"
+                    }
+                }
+            }
+        },
+        "/api/partner/{slug}": {
+            "get": {
+                "tags": [
+                    "Partner"
+                ],
+                "summary": "Ambil detail Partner berdasarkan slug",
+                "operationId": "6815e442de6b9d0706a3b21f83a509c0",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug dari Partner",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data Partner"
+                    },
+                    "404": {
+                        "description": "Partner tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/legal": {
+            "get": {
+                "tags": [
+                    "Legal"
+                ],
+                "summary": "Ambil daftar Legal",
+                "operationId": "a97f34e61f6fbf9c37a205688a10498c",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan title atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar Legal"
+                    }
+                }
+            }
+        },
+        "/api/legal/{id}": {
+            "get": {
+                "tags": [
+                    "Legal"
+                ],
+                "summary": "Ambil detail Legal berdasarkan id",
+                "operationId": "c2e5583c51cf6b0430912652a35c562e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id dari Legal",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data Legal"
+                    },
+                    "404": {
+                        "description": "Legal tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/team": {
+            "get": {
+                "tags": [
+                    "Ourteam"
+                ],
+                "summary": "Ambil daftar Our Team",
+                "operationId": "a6f648f4f7145b929a0bd4560d59de1e",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan name atau title",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar Our Team"
+                    }
+                }
+            }
+        },
+        "/api/team/{id}": {
+            "get": {
+                "tags": [
+                    "Ourteam"
+                ],
+                "summary": "Ambil detail our team berdasarkan id",
+                "operationId": "61f975a451610d985be88c36db6d69c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id dari our team",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data our team"
+                    },
+                    "404": {
+                        "description": "our team tidak ditemukan"
+                    }
+                }
+            }
+        },
+        "/api/slider": {
+            "get": {
+                "tags": [
+                    "Slider"
+                ],
+                "summary": "Ambil daftar Slider",
+                "operationId": "6bd60bd547c83f23d5498450eac80827",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Cari berdasarkan title atau isi",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar slider"
+                    }
+                }
+            }
+        },
+        "/api/meta-pixel": {
+            "get": {
+                "tags": [
+                    "Pixel"
+                ],
+                "summary": "Get the first Pixel setting",
+                "operationId": "4ef28fb5a5c4f984f86ab82c6616de61",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/google-analytics": {
+            "get": {
+                "tags": [
+                    "Google Analytics"
+                ],
+                "summary": "Get the first Google Analytics setting",
+                "operationId": "455508ccf753fda93f3aabc565163bbb",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/chat": {
+            "get": {
+                "tags": [
+                    "Welcome Chat"
+                ],
+                "summary": "Get the first welcome chat message",
+                "operationId": "aa37dce0e347b2e8616a4c771207f39e",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/identity": {
+            "get": {
+                "tags": [
+                    "Identitiy"
+                ],
+                "summary": "Get the first Indentity",
+                "operationId": "09446d935742161504d855b80e1b1232",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Post",
+            "description": "Post"
+        },
+        {
+            "name": "Agenda",
+            "description": "Agenda"
+        },
+        {
+            "name": "Program",
+            "description": "Program"
+        },
+        {
+            "name": "Unggulan",
+            "description": "Unggulan"
+        },
+        {
+            "name": "Assesment",
+            "description": "Assesment"
+        },
+        {
+            "name": "Pricing",
+            "description": "Pricing"
+        },
+        {
+            "name": "Benefit",
+            "description": "Benefit"
+        },
+        {
+            "name": "Testimoni",
+            "description": "Testimoni"
+        },
+        {
+            "name": "Portofolio",
+            "description": "Portofolio"
+        },
+        {
+            "name": "Support",
+            "description": "Support"
+        },
+        {
+            "name": "Partner",
+            "description": "Partner"
+        },
+        {
+            "name": "Legal",
+            "description": "Legal"
+        },
+        {
+            "name": "Ourteam",
+            "description": "Ourteam"
+        },
+        {
+            "name": "Slider",
+            "description": "Slider"
+        },
+        {
+            "name": "Pixel",
+            "description": "Pixel"
+        },
+        {
+            "name": "Google Analytics",
+            "description": "Google Analytics"
+        },
+        {
+            "name": "Welcome Chat",
+            "description": "Welcome Chat"
+        },
+        {
+            "name": "Identitiy",
+            "description": "Identitiy"
+        }
+    ]
+}

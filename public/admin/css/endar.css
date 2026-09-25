@@ -1,0 +1,133 @@
+.admin-edit-image{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+.container-image{
+    position: relative;
+}
+.top-right-close {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 20px;
+    color: brown;
+  }
+  .btn-center{
+    display: flex;
+    justify-content: center;
+}
+.flex{
+    display: flex;
+}
+.admin-index-image{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 10px;
+}
+.admin-index-image-program{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 10px;
+}
+.modernui_section_bg{
+    z-index: -99;
+}
+
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  #video-container {
+    position: relative;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  #close-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .youtube-video-container {
+    display: block;
+    position: relative;
+    background-color: #7367f0;
+    background-position: center center;
+    height: 300px;
+    border-radius: 30px;
+    background-size: cover;
+    background-blend-mode: luminosity;
+}
+.play-youtube{
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+}
+.play-icon{
+    font-size: 36px;
+}
+img.logo {
+  width: 100%;
+  padding: 10px;
+}
+.thumbnails{
+  width: 100%;
+  padding: 15px;
+  border-radius: 20px;
+}
+ul li {
+  list-style: circle;
+  margin-left: 25px;
+}
+
+li.page-item{
+  list-style: none;
+}
+li.nav-item{
+  list-style: none;
+}
+
+.justify-between{
+  justify-content: space-between;
+}
+
+.justify-end{
+  justify-content: flex-end;
+}
+img.admin-edit-logo {
+  width: 100%;
+}
+img.admin-edit-favicon {
+  max-width: 100px;
+  height: auto;
+}
+.img-unggulan {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center center;
+  -o-object-fit: cover;
+  -o-object-position: center center;
+}
+
