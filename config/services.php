@@ -31,4 +31,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'watzap' => [
+        'api_key'    => env('WATZAP_API_KEY'),
+        'number_key' => env('WATZAP_NUMBER_KEY'),
+        'api_url'    => env('WATZAP_API_URL', 'https://api.watzap.id/v1'),
+    ],
+
+    'pelatihan' => [
+        'wa_group_link' => env('PELATIHAN_WA_GROUP_LINK', ''),
+    ],
+
 ];
+

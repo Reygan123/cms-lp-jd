@@ -9,36 +9,58 @@
                             <h5 class="card-title mb-0">Peserta Pelatihan</h5>
                             <small class="text-muted"><?php echo e($pelatihan->title); ?> <?php echo e($pelatihan->batch ? '— ' . $pelatihan->batch : ''); ?></small>
                         </div>
-                        <a href="<?php echo e(route('admin.pelatihan.index')); ?>" class="btn btn-secondary btn-rounded btn-sm">
-                            <i class="fa-solid fa-arrow-left mr-1"></i>Kembali
-                        </a>
+                        <div class="d-flex align-items-center flex-wrap" style="gap:6px">
+                            <a href="<?php echo e(route('admin.pelatihan.bundle.index', $pelatihan->id)); ?>" class="btn btn-outline-info btn-rounded btn-sm">
+                                <i class="fa-solid fa-box-open mr-1"></i>Bundling
+                            </a>
+                            <a href="<?php echo e(route('admin.pelatihan.participant.export', [$pelatihan->id])); ?><?php echo e(request('status') ? '?status='.request('status') : ''); ?>" class="btn btn-success btn-rounded btn-sm">
+                                <i class="fa-solid fa-file-csv mr-1"></i>Export CSV
+                            </a>
+                            <a href="<?php echo e(route('admin.pelatihan.index')); ?>" class="btn btn-secondary btn-rounded btn-sm">
+                                <i class="fa-solid fa-arrow-left mr-1"></i>Kembali
+                            </a>
+                        </div>
                     </div>
 
                     <div class="row mb-4">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="card border text-center py-3">
                                 <div class="text-2xl font-bold text-dark"><?php echo e($counts['all']); ?></div>
                                 <div class="text-muted small">Total Peserta</div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="card border text-center py-3">
                                 <div class="text-2xl font-bold text-warning"><?php echo e($counts['pending']); ?></div>
                                 <div class="text-muted small">Menunggu</div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="card border text-center py-3">
                                 <div class="text-2xl font-bold text-success"><?php echo e($counts['approved']); ?></div>
                                 <div class="text-muted small">Disetujui</div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="card border text-center py-3">
                                 <div class="text-2xl font-bold text-danger"><?php echo e($counts['rejected']); ?></div>
                                 <div class="text-muted small">Ditolak</div>
                             </div>
                         </div>
+                        <?php if($pelatihan->quota !== null): ?>
+                        <div class="col-md-2">
+                            <div class="card border text-center py-3">
+                                <div class="text-2xl font-bold <?php echo e($pelatihan->quota_remaining <= 0 ? 'text-danger' : 'text-info'); ?>"><?php echo e($pelatihan->quota_remaining); ?></div>
+                                <div class="text-muted small">Sisa Kuota</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="card border text-center py-3">
+                                <div class="text-2xl font-bold text-secondary"><?php echo e($pelatihan->quota); ?></div>
+                                <div class="text-muted small">Total Kuota</div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -80,8 +102,8 @@
                                         <div class="text-muted small"><?php echo e($p->registration_type === 'kolektif' ? 'Kolektif (' . $p->collective_count . ' org)' : 'Individu'); ?></div>
                                     </td>
                                     <td class="small">
-                                        <?php echo e($p->institution_name ?? '-'); ?><br>
-                                        <span class="text-muted"><?php echo e($p->institution_level ?? ''); ?></span>
+                                        <strong><?php echo e($p->institution_name ?? '-'); ?></strong><br>
+                                        <span class="text-muted"><?php echo e($p->institution_city ? $p->institution_city . ' • ' : ''); ?><?php echo e($p->institution_level ?? ''); ?></span>
                                     </td>
                                     <td class="small">
                                         <?php echo e($p->email); ?><br>

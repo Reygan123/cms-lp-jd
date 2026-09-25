@@ -30,6 +30,35 @@ class Pelatihan extends Model
         'status',
     ];
 
+    public function bundles()
+    {
+        return $this->hasMany(PelatihanBundle::class)->where('is_active', true)->orderBy('person_count');
+    }
+
+    public function getUsedQuotaAttribute(): int
+    {
+        return (int) $this->participants()
+            ->whereIn('status', ['approved', 'pending'])
+            ->with(['bundle', 'subParticipants'])
+            ->get()
+            ->sum(function ($p) {
+                if ($p->collective_count && (int) $p->collective_count > 0) {
+                    return (int) $p->collective_count;
+                }
+                if ($p->bundle) {
+                    return (int) $p->bundle->person_count;
+                }
+                $subCount = $p->subParticipants ? $p->subParticipants->count() : 0;
+                return $subCount > 0 ? 1 + $subCount : 1;
+            });
+    }
+
+    public function getQuotaRemainingAttribute(): ?int
+    {
+        if ($this->quota === null) return null;
+        return max(0, $this->quota - $this->used_quota);
+    }
+
     public function questions()
     {
         return $this->hasMany(PelatihanQuestion::class)->orderBy('sort_order');

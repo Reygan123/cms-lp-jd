@@ -52,6 +52,12 @@
                                         <a href="<?php echo e(route('admin.pelatihan.participant.index', $p->id)); ?>" class="badge badge-primary">
                                             <?php echo e($p->participants_count); ?> Peserta
                                         </a>
+                                        <?php if($p->quota !== null): ?>
+                                        <span class="badge <?php echo e($p->quota_remaining <= 0 ? 'badge-danger' : 'badge-light'); ?>">
+                                            Kuota: <?php echo e($p->quota_remaining); ?>/<?php echo e($p->quota); ?>
+
+                                        </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <span class="badge badge-<?php echo e($p->status === 'active' ? 'success' : ($p->status === 'closed' ? 'danger' : 'warning')); ?>">
@@ -64,6 +70,7 @@
                                             <a href="<?php echo e(route('admin.pelatihan.edit', $p->id)); ?>" class="badge badge-warning mr-1">Edit</a>
                                             <a href="<?php echo e(route('admin.pelatihan.participant.index', $p->id)); ?>" class="badge badge-info mr-1">Peserta</a>
                                             <a href="<?php echo e(route('admin.pelatihan.referral.index', $p->id)); ?>" class="badge badge-secondary mr-1">Referral</a>
+                                            <a href="<?php echo e(route('admin.pelatihan.bundle.index', $p->id)); ?>" class="badge badge-dark mr-1">Bundling</a>
                                             <button class="badge badge-danger btn-delete border-0" data-id="<?php echo e($p->id); ?>">Hapus</button>
                                         </div>
                                     </td>

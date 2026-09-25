@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pelatihan;
+use App\Models\PelatihanBundle;
 use App\Models\PelatihanParticipant;
+use App\Models\PelatihanSubParticipant;
 use App\Models\PelatihanReferral;
 use App\Models\PelatihanAnswer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,10 +17,11 @@ class PelatihanAPIController extends Controller
 {
     public function index()
     {
-        $pelatihans = Pelatihan::where('status', 'active')
-            ->withCount('participants')
+        $pelatihans = Pelatihan::whereIn('status', ['active', 'Active', 'aktif', 'Aktif'])
+            ->with(['bundles', 'participants.bundle', 'participants.subParticipants'])
             ->latest()
             ->get()
+            ->values()
             ->map(function ($p) {
                 return [
                     'id'                => $p->id,
@@ -32,13 +36,15 @@ class PelatihanAPIController extends Controller
                     'location'          => $p->location,
                     'price'             => $p->price,
                     'quota'             => $p->quota,
-                    'participants_count'=> $p->participants_count,
+                    'quota_remaining'   => $p->quota_remaining,
+                    'participants_count'=> $p->used_quota,
                     'image'             => $p->image ? asset('storage/pelatihans/' . $p->image) : null,
                     'whatsapp_contact'  => $p->whatsapp_contact,
                     'email_contact'     => $p->email_contact,
                     'status'            => $p->status,
                 ];
-            });
+            })
+            ->values();
 
         return response()->json([
             'success' => true,
@@ -48,7 +54,17 @@ class PelatihanAPIController extends Controller
 
     public function show($slug)
     {
-        $pelatihan = Pelatihan::with('questions')->where('slug', $slug)->where('status', 'active')->first();
+        $cleanSlug = trim(urldecode($slug));
+        $pelatihan = Pelatihan::with(['questions', 'bundles', 'participants.bundle', 'participants.subParticipants'])
+            ->where(function ($query) use ($cleanSlug) {
+                $query->where('slug', $cleanSlug)
+                      ->orWhere('id', $cleanSlug);
+                if (preg_match('/-(\d+)$/', $cleanSlug, $matches)) {
+                    $query->orWhere('id', $matches[1]);
+                }
+            })
+            ->whereIn('status', ['active', 'Active', 'aktif', 'Aktif', 'closed'])
+            ->first();
 
         if (!$pelatihan) {
             return response()->json(['success' => false, 'message' => 'Pelatihan tidak ditemukan.'], 404);
@@ -56,14 +72,25 @@ class PelatihanAPIController extends Controller
 
         $questions = $pelatihan->questions->map(function ($q) {
             return [
-                'id'                     => $q->id,
-                'question'               => $q->question,
-                'type'                   => $q->type,
-                'options'                => $q->options,
-                'is_required'            => $q->is_required,
-                'sort_order'             => $q->sort_order,
-                'conditional_on_question'=> $q->conditional_on_question,
-                'conditional_on_value'   => $q->conditional_on_value,
+                'id'                      => $q->id,
+                'question'                => $q->question,
+                'type'                    => $q->type,
+                'options'                 => $q->options,
+                'is_required'             => $q->is_required,
+                'sort_order'              => $q->sort_order,
+                'conditional_on_question' => $q->conditional_on_question,
+                'conditional_on_value'    => $q->conditional_on_value,
+            ];
+        });
+
+        $bundles = $pelatihan->bundles->map(function ($b) {
+            return [
+                'id'              => $b->id,
+                'name'            => $b->name,
+                'person_count'    => $b->person_count,
+                'bundle_price'    => (float) $b->bundle_price,
+                'price_per_person'=> $b->price_per_person,
+                'description'     => $b->description,
             ];
         });
 
@@ -85,10 +112,13 @@ class PelatihanAPIController extends Controller
                 'bank_account'     => $pelatihan->bank_account,
                 'bank_holder'      => $pelatihan->bank_holder,
                 'quota'            => $pelatihan->quota,
+                'quota_remaining'  => $pelatihan->quota_remaining,
+                'participants_count'=> $pelatihan->used_quota,
                 'image'            => $pelatihan->image ? asset('storage/pelatihans/' . $pelatihan->image) : null,
                 'whatsapp_contact' => $pelatihan->whatsapp_contact,
                 'email_contact'    => $pelatihan->email_contact,
                 'questions'        => $questions,
+                'bundles'          => $bundles,
             ],
         ]);
     }
@@ -96,8 +126,10 @@ class PelatihanAPIController extends Controller
     public function checkReferral(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code'        => 'required|string',
-            'pelatihan_id'=> 'required|exists:pelatihans,id',
+            'code'             => 'required|string',
+            'pelatihan_id'     => 'required|exists:pelatihans,id',
+            'bundle_id'        => 'nullable|exists:pelatihan_bundles,id',
+            'collective_count' => 'nullable|integer|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -116,20 +148,30 @@ class PelatihanAPIController extends Controller
             return response()->json(['success' => false, 'message' => 'Kode referral sudah tidak aktif atau habis digunakan.'], 422);
         }
 
-        $pelatihan = Pelatihan::find($request->pelatihan_id);
-        $discount = $referral->calculateDiscount((float) $pelatihan->price);
-        $finalPrice = max(0, (float) $pelatihan->price - $discount);
+        $pelatihan     = Pelatihan::find($request->pelatihan_id);
+        $count         = max(1, (int) $request->input('collective_count', 1));
+        $basePrice     = (float) $pelatihan->price;
+
+        if ($request->bundle_id) {
+            $bundle    = PelatihanBundle::find($request->bundle_id);
+            $basePrice = $bundle ? (float) $bundle->bundle_price : $basePrice;
+        } else {
+            $basePrice = $basePrice * $count;
+        }
+
+        $discount   = $referral->calculateDiscount($basePrice);
+        $finalPrice = max(0, $basePrice - $discount);
 
         return response()->json([
             'success' => true,
             'data'    => [
-                'code'           => $referral->code,
-                'partner_name'   => $referral->partner_name,
-                'discount_type'  => $referral->discount_type,
-                'discount_value' => $referral->discount_value,
-                'discount_amount'=> $discount,
-                'original_price' => $pelatihan->price,
-                'final_price'    => $finalPrice,
+                'code'            => $referral->code,
+                'partner_name'    => $referral->partner_name,
+                'discount_type'   => $referral->discount_type,
+                'discount_value'  => $referral->discount_value,
+                'discount_amount' => $discount,
+                'original_price'  => $basePrice,
+                'final_price'     => $finalPrice,
             ],
         ]);
     }
@@ -137,28 +179,50 @@ class PelatihanAPIController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'pelatihan_id'          => 'required|exists:pelatihans,id',
-            'full_name'             => 'required|string|max:255',
-            'name_for_certificate'  => 'required|string|max:255',
-            'email'                 => 'required|email|max:255',
-            'whatsapp'              => 'required|string|max:20',
-            'domicile'              => 'required|string',
-            'institution_level'     => 'required|string|max:100',
-            'institution_name'      => 'required|string|max:255',
-            'role_in_institution'   => 'required|string|max:255',
-            'skill_to_improve'      => 'nullable|string',
-            'had_previous_training' => 'required|boolean',
-            'registration_type'     => 'required|in:individu,kolektif',
-            'collective_count'      => 'nullable|integer|min:1',
-            'collective_coordinator'=> 'nullable|string|max:255',
-            'referral_code'         => 'nullable|string|max:50',
-            'referral_giver_name'   => 'nullable|string|max:255',
-            'payment_sender_name'   => 'nullable|string|max:255',
-            'payment_date'          => 'nullable|date',
-            'payment_proof'         => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'needs_invoice'         => 'required|boolean',
-            'invoice_name'          => 'nullable|string|max:255',
-            'answers'               => 'nullable|array',
+            'pelatihan_id'              => 'required|exists:pelatihans,id',
+            'bundle_id'                 => 'nullable|exists:pelatihan_bundles,id',
+            'full_name'                 => 'required|string|max:255',
+            'name_for_certificate'      => 'required|string|max:255',
+            'gender'                    => 'nullable|string|max:20',
+            'birth_place'               => 'nullable|string|max:100',
+            'birth_date'                => 'nullable|date',
+            'age'                       => 'nullable|integer|min:1|max:120',
+            'email'                     => 'required|email|max:255',
+            'whatsapp'                  => 'required|string|max:20',
+            'domicile'                  => 'required|string',
+            'institution_name'          => 'required|string|max:255',
+            'institution_level'         => 'required',
+            'institution_city'          => 'nullable|string|max:100',
+            'role_in_institution'       => 'required|string|max:255',
+            'skill_to_improve'          => 'nullable|string',
+            'had_previous_training'     => 'required|boolean',
+            'registration_type'         => 'required|in:individu,kolektif',
+            'collective_count'          => 'nullable|integer|min:1',
+            'collective_coordinator'    => 'nullable|string|max:255',
+            'sub_participants'          => 'nullable|array',
+            'sub_participants.*.full_name'             => 'required_with:sub_participants|string|max:255',
+            'sub_participants.*.name_for_certificate'  => 'required_with:sub_participants|string|max:255',
+            'sub_participants.*.gender'                => 'nullable|string|max:20',
+            'sub_participants.*.birth_place'           => 'nullable|string|max:100',
+            'sub_participants.*.birth_date'            => 'nullable|date',
+            'sub_participants.*.age'                   => 'nullable|integer|min:1|max:120',
+            'sub_participants.*.email'                 => 'nullable|email|max:255',
+            'sub_participants.*.whatsapp'              => 'nullable|string|max:20',
+            'sub_participants.*.domicile'              => 'nullable|string',
+            'sub_participants.*.institution_name'      => 'nullable|string|max:255',
+            'sub_participants.*.institution_level'     => 'nullable',
+            'sub_participants.*.institution_city'      => 'nullable|string|max:100',
+            'sub_participants.*.role_in_institution'   => 'nullable|string|max:255',
+            'sub_participants.*.skill_to_improve'      => 'nullable|string',
+            'sub_participants.*.had_previous_training' => 'nullable|boolean',
+            'referral_code'             => 'nullable|string|max:50',
+            'referral_giver_name'       => 'nullable|string|max:255',
+            'payment_sender_name'       => 'nullable|string|max:255',
+            'payment_date'              => 'nullable|date',
+            'payment_proof'             => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'needs_invoice'             => 'required|boolean',
+            'invoice_name'              => 'nullable|string|max:255',
+            'answers'                   => 'nullable|array',
         ]);
 
         if ($validator->fails()) {
@@ -171,10 +235,42 @@ class PelatihanAPIController extends Controller
             return response()->json(['success' => false, 'message' => 'Pendaftaran pelatihan ini sudah ditutup.'], 422);
         }
 
-        $referralId = null;
+        $bundle         = null;
+        $bundleName     = null;
+        $requestedSeats = 1;
+
+        if ($request->bundle_id) {
+            $bundle = PelatihanBundle::where('pelatihan_id', $pelatihan->id)->where('is_active', true)->find($request->bundle_id);
+            if ($bundle) {
+                $bundleName     = $bundle->name;
+                $originalPrice  = (float) $bundle->bundle_price;
+                $requestedSeats = max((int) $bundle->person_count, (int) ($request->collective_count ?: 1));
+            } else {
+                $originalPrice  = (float) $pelatihan->price;
+            }
+        } elseif ($request->registration_type === 'kolektif') {
+            $subCount       = is_array($request->sub_participants) ? count($request->sub_participants) : 0;
+            $requestedSeats = max((int) ($request->collective_count ?: 1), $subCount + 1);
+            $originalPrice  = (float) $pelatihan->price * $requestedSeats;
+        } else {
+            $originalPrice  = (float) $pelatihan->price;
+        }
+
+        if ($pelatihan->quota !== null && $pelatihan->quota_remaining !== null) {
+            if ($pelatihan->quota_remaining <= 0) {
+                return response()->json(['success' => false, 'message' => 'Maaf, kuota pelatihan ini sudah penuh.'], 422);
+            }
+            if ($pelatihan->quota_remaining < $requestedSeats) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Maaf, sisa kuota yang tersedia hanya {$pelatihan->quota_remaining} kursi, tidak mencukupi untuk {$requestedSeats} orang peserta."
+                ], 422);
+            }
+        }
+
+        $referralId     = null;
         $discountAmount = 0;
-        $originalPrice = (float) $pelatihan->price;
-        $finalPrice = $originalPrice;
+        $finalPrice     = $originalPrice;
 
         if ($request->referral_code) {
             $referral = PelatihanReferral::where('code', strtoupper(trim($request->referral_code)))
@@ -183,8 +279,8 @@ class PelatihanAPIController extends Controller
 
             if ($referral && $referral->isAvailable()) {
                 $discountAmount = $referral->calculateDiscount($originalPrice);
-                $finalPrice = max(0, $originalPrice - $discountAmount);
-                $referralId = $referral->id;
+                $finalPrice     = max(0, $originalPrice - $discountAmount);
+                $referralId     = $referral->id;
             }
         }
 
@@ -197,24 +293,39 @@ class PelatihanAPIController extends Controller
             $paymentProofName = $file->hashName();
         }
 
+        // Auto calculate age if birth_date provided and age empty
+        $age = $request->age;
+        if (empty($age) && $request->filled('birth_date')) {
+            try {
+                $age = Carbon::parse($request->birth_date)->age;
+            } catch (\Throwable $e) {}
+        }
+
         $participant = PelatihanParticipant::create([
             'pelatihan_id'          => $pelatihan->id,
             'referral_id'           => $referralId,
+            'bundle_id'             => $bundle ? $bundle->id : null,
+            'bundle_name'           => $bundleName,
             'registration_code'     => $registrationCode,
             'referral_code'         => $request->referral_code ? strtoupper(trim($request->referral_code)) : null,
             'referral_giver_name'   => $request->referral_giver_name,
             'full_name'             => $request->full_name,
             'name_for_certificate'  => $request->name_for_certificate,
+            'gender'                => $request->gender,
+            'birth_place'           => $request->birth_place,
+            'birth_date'            => $request->birth_date,
+            'age'                   => $age,
             'email'                 => $request->email,
             'whatsapp'              => $request->whatsapp,
             'domicile'              => $request->domicile,
             'institution_level'     => $request->institution_level,
             'institution_name'      => $request->institution_name,
+            'institution_city'      => $request->institution_city,
             'role_in_institution'   => $request->role_in_institution,
             'skill_to_improve'      => $request->skill_to_improve,
             'had_previous_training' => $request->had_previous_training,
-            'registration_type'     => $request->registration_type,
-            'collective_count'      => $request->collective_count,
+            'registration_type'     => ($bundle && (int)$bundle->person_count > 1) ? 'kolektif' : $request->registration_type,
+            'collective_count'      => $requestedSeats,
             'collective_coordinator'=> $request->collective_coordinator,
             'payment_sender_name'   => $request->payment_sender_name,
             'payment_date'          => $request->payment_date,
@@ -226,6 +337,36 @@ class PelatihanAPIController extends Controller
             'final_price'           => $finalPrice,
             'status'                => 'pending',
         ]);
+
+        if (($request->registration_type === 'kolektif' || $bundle) && $request->has('sub_participants') && is_array($request->sub_participants)) {
+            foreach ($request->sub_participants as $sub) {
+                $subAge = $sub['age'] ?? null;
+                if (empty($subAge) && !empty($sub['birth_date'])) {
+                    try {
+                        $subAge = Carbon::parse($sub['birth_date'])->age;
+                    } catch (\Throwable $e) {}
+                }
+
+                PelatihanSubParticipant::create([
+                    'participant_id'        => $participant->id,
+                    'full_name'             => $sub['full_name'],
+                    'name_for_certificate'  => $sub['name_for_certificate'],
+                    'gender'                => $sub['gender'] ?? null,
+                    'birth_place'           => $sub['birth_place'] ?? null,
+                    'birth_date'            => $sub['birth_date'] ?? null,
+                    'age'                   => $subAge,
+                    'email'                 => $sub['email'] ?? null,
+                    'whatsapp'              => $sub['whatsapp'] ?? null,
+                    'domicile'              => $sub['domicile'] ?? null,
+                    'institution_name'      => $sub['institution_name'] ?? ($participant->institution_name ?? null),
+                    'institution_level'     => $sub['institution_level'] ?? ($participant->institution_level ?? null),
+                    'institution_city'      => $sub['institution_city'] ?? ($participant->institution_city ?? null),
+                    'role_in_institution'   => $sub['role_in_institution'] ?? null,
+                    'skill_to_improve'      => $sub['skill_to_improve'] ?? null,
+                    'had_previous_training' => $sub['had_previous_training'] ?? null,
+                ]);
+            }
+        }
 
         if ($request->has('answers') && is_array($request->answers)) {
             foreach ($request->answers as $questionId => $answerValue) {
@@ -250,6 +391,7 @@ class PelatihanAPIController extends Controller
                 'original_price'    => $originalPrice,
                 'discount_amount'   => $discountAmount,
                 'final_price'       => $finalPrice,
+                'bundle'            => $bundleName,
                 'status'            => 'pending',
             ],
         ], 201);
@@ -270,20 +412,20 @@ class PelatihanAPIController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'registration_code' => $participant->registration_code,
-                'full_name'         => $participant->full_name,
-                'email'             => $participant->email,
-                'event'             => $participant->pelatihan ? $participant->pelatihan->title : '-',
-                'original_price'    => (float) $participant->original_price,
-                'final_price'       => (float) $participant->final_price,
-                'discount_amount'   => (float) $participant->discount_amount,
-                'potongan_didapat'  => (float) $participant->discount_amount,
-                'status'            => $participant->status,
-                'admin_note'        => $participant->admin_note,
-                'certificate_file'  => $participant->certificate_file ? asset('storage/certificates/' . $participant->certificate_file) : null,
+            'data'    => [
+                'registration_code'  => $participant->registration_code,
+                'full_name'          => $participant->full_name,
+                'email'              => $participant->email,
+                'event'              => $participant->pelatihan ? $participant->pelatihan->title : '-',
+                'original_price'     => (float) $participant->original_price,
+                'final_price'        => (float) $participant->final_price,
+                'discount_amount'    => (float) $participant->discount_amount,
+                'bundle'             => $participant->bundle_name,
+                'status'             => $participant->status,
+                'admin_note'         => $participant->admin_note,
+                'certificate_file'   => $participant->certificate_file ? asset('storage/certificates/' . $participant->certificate_file) : null,
                 'certificate_sent_at'=> $participant->certificate_sent_at,
-                'sertifikat_dikirim'=> !empty($participant->certificate_sent_at),
+                'sertifikat_dikirim' => !empty($participant->certificate_sent_at),
             ],
         ]);
     }

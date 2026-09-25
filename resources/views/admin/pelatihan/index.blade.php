@@ -53,6 +53,11 @@
                                         <a href="{{ route('admin.pelatihan.participant.index', $p->id) }}" class="badge badge-primary">
                                             {{ $p->participants_count }} Peserta
                                         </a>
+                                        @if($p->quota !== null)
+                                        <span class="badge {{ $p->quota_remaining <= 0 ? 'badge-danger' : 'badge-light' }}">
+                                            Kuota: {{ $p->quota_remaining }}/{{ $p->quota }}
+                                        </span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge badge-{{ $p->status === 'active' ? 'success' : ($p->status === 'closed' ? 'danger' : 'warning') }}">
@@ -64,6 +69,7 @@
                                             <a href="{{ route('admin.pelatihan.edit', $p->id) }}" class="badge badge-warning mr-1">Edit</a>
                                             <a href="{{ route('admin.pelatihan.participant.index', $p->id) }}" class="badge badge-info mr-1">Peserta</a>
                                             <a href="{{ route('admin.pelatihan.referral.index', $p->id) }}" class="badge badge-secondary mr-1">Referral</a>
+                                            <a href="{{ route('admin.pelatihan.bundle.index', $p->id) }}" class="badge badge-dark mr-1">Bundling</a>
                                             <button class="badge badge-danger btn-delete border-0" data-id="{{ $p->id }}">Hapus</button>
                                         </div>
                                     </td>

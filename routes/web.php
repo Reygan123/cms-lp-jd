@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PelatihanController;
 use App\Http\Controllers\Admin\PelatihanReferralController;
 use App\Http\Controllers\Admin\PelatihanParticipantController;
+use App\Http\Controllers\Admin\PelatihanBundleController;
 
 
 Route::get('/salaam', function () {
@@ -307,12 +308,24 @@ Route::prefix('admin')->group(function () {
             Route::delete('/referral/{referralId}', [PelatihanReferralController::class, 'destroy'])->name('admin.pelatihan.referral.destroy');
 
             Route::get('/participant', [PelatihanParticipantController::class, 'index'])->name('admin.pelatihan.participant.index');
+            Route::get('/participant/export', [PelatihanParticipantController::class, 'export'])->name('admin.pelatihan.participant.export');
             Route::get('/participant/{participantId}', [PelatihanParticipantController::class, 'show'])->name('admin.pelatihan.participant.show');
             Route::post('/participant/{participantId}/approve', [PelatihanParticipantController::class, 'approve'])->name('admin.pelatihan.participant.approve');
             Route::post('/participant/{participantId}/reject', [PelatihanParticipantController::class, 'reject'])->name('admin.pelatihan.participant.reject');
+            Route::post('/participant/{participantId}/update-status', [PelatihanParticipantController::class, 'updateStatus'])->name('admin.pelatihan.participant.update-status');
             Route::post('/participant/{participantId}/upload-certificate', [PelatihanParticipantController::class, 'uploadCertificate'])->name('admin.pelatihan.participant.upload-certificate');
             Route::post('/participant/{participantId}/send-certificate', [PelatihanParticipantController::class, 'sendCertificate'])->name('admin.pelatihan.participant.send-certificate');
+            Route::post('/participant/{participantId}/sub/{subId}/upload-certificate', [PelatihanParticipantController::class, 'uploadSubCertificate'])->name('admin.pelatihan.participant.sub.upload-certificate');
+            Route::post('/participant/{participantId}/sub/{subId}/send-certificate', [PelatihanParticipantController::class, 'sendSubCertificate'])->name('admin.pelatihan.participant.sub.send-certificate');
+            Route::post('/participant/{participantId}/send-all-certificates', [PelatihanParticipantController::class, 'sendAllSubCertificates'])->name('admin.pelatihan.participant.send-all-certificates');
             Route::delete('/participant/{participantId}', [PelatihanParticipantController::class, 'destroy'])->name('admin.pelatihan.participant.destroy');
+
+            Route::get('/bundle', [PelatihanBundleController::class, 'index'])->name('admin.pelatihan.bundle.index');
+            Route::get('/bundle/create', [PelatihanBundleController::class, 'create'])->name('admin.pelatihan.bundle.create');
+            Route::post('/bundle', [PelatihanBundleController::class, 'store'])->name('admin.pelatihan.bundle.store');
+            Route::get('/bundle/{bundleId}/edit', [PelatihanBundleController::class, 'edit'])->name('admin.pelatihan.bundle.edit');
+            Route::put('/bundle/{bundleId}', [PelatihanBundleController::class, 'update'])->name('admin.pelatihan.bundle.update');
+            Route::delete('/bundle/{bundleId}', [PelatihanBundleController::class, 'destroy'])->name('admin.pelatihan.bundle.destroy');
         });
     });
 });

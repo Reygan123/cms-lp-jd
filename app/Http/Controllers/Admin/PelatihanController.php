@@ -121,7 +121,7 @@ class PelatihanController extends Controller
 
         $pelatihan->update([
             'title'             => $request->title,
-            'slug'              => Str::slug($request->title, '-') . '-' . $pelatihan->id,
+            'slug'              => $pelatihan->slug ?: (Str::slug($request->title, '-') . '-' . $pelatihan->id),
             'batch'             => $request->batch,
             'description'       => $request->description,
             'start_date'        => $request->start_date,
