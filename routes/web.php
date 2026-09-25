@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Dukungan;
 use App\Models\Welcomechat;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PelatihanController;
+use App\Http\Controllers\Admin\PelatihanReferralController;
+use App\Http\Controllers\Admin\PelatihanParticipantController;
 
 
 Route::get('/salaam', function () {
@@ -292,5 +295,24 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('/usp', UspController::class, ['as' => 'admin']);
         Route::delete('admin/usp/massDestroy', [UspController::class, 'massDestroy'])->name('admin.usp.massDestroy');
+
+        Route::resource('/pelatihan', PelatihanController::class, ['as' => 'admin']);
+
+        Route::prefix('pelatihan/{pelatihanId}')->group(function () {
+            Route::get('/referral', [PelatihanReferralController::class, 'index'])->name('admin.pelatihan.referral.index');
+            Route::get('/referral/create', [PelatihanReferralController::class, 'create'])->name('admin.pelatihan.referral.create');
+            Route::post('/referral', [PelatihanReferralController::class, 'store'])->name('admin.pelatihan.referral.store');
+            Route::get('/referral/{referralId}/edit', [PelatihanReferralController::class, 'edit'])->name('admin.pelatihan.referral.edit');
+            Route::put('/referral/{referralId}', [PelatihanReferralController::class, 'update'])->name('admin.pelatihan.referral.update');
+            Route::delete('/referral/{referralId}', [PelatihanReferralController::class, 'destroy'])->name('admin.pelatihan.referral.destroy');
+
+            Route::get('/participant', [PelatihanParticipantController::class, 'index'])->name('admin.pelatihan.participant.index');
+            Route::get('/participant/{participantId}', [PelatihanParticipantController::class, 'show'])->name('admin.pelatihan.participant.show');
+            Route::post('/participant/{participantId}/approve', [PelatihanParticipantController::class, 'approve'])->name('admin.pelatihan.participant.approve');
+            Route::post('/participant/{participantId}/reject', [PelatihanParticipantController::class, 'reject'])->name('admin.pelatihan.participant.reject');
+            Route::post('/participant/{participantId}/upload-certificate', [PelatihanParticipantController::class, 'uploadCertificate'])->name('admin.pelatihan.participant.upload-certificate');
+            Route::post('/participant/{participantId}/send-certificate', [PelatihanParticipantController::class, 'sendCertificate'])->name('admin.pelatihan.participant.send-certificate');
+            Route::delete('/participant/{participantId}', [PelatihanParticipantController::class, 'destroy'])->name('admin.pelatihan.participant.destroy');
+        });
     });
 });

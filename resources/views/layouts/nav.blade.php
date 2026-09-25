@@ -144,6 +144,13 @@
                 </ul>
             </li>
 
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-school"></i><span
+                        class="nav-text">Pelatihan</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('admin.pelatihan.index') }}">Daftar Pelatihan</a></li>
+                </ul>
+            </li>
+
             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-widgets"></i><span
                         class="nav-text">Features</span></a>
                 <ul aria-expanded="false">

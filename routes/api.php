@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\PelatihanAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,3 +125,9 @@ Route::get('/faq/by-category/{category}', [APIController::class, 'getFaqByCatego
 
 // USP routes
 Route::get('/usp', [APIController::class, 'getUspAll'])->name('getUspAll');
+
+// Pelatihan (Training Registration) routes
+Route::get('/pelatihan', [PelatihanAPIController::class, 'index'])->name('pelatihan.index');
+Route::get('/pelatihan/{slug}', [PelatihanAPIController::class, 'show'])->name('pelatihan.show');
+Route::post('/pelatihan/check-referral', [PelatihanAPIController::class, 'checkReferral'])->name('pelatihan.check-referral');
+Route::post('/pelatihan/daftar', [PelatihanAPIController::class, 'register'])->name('pelatihan.register');
