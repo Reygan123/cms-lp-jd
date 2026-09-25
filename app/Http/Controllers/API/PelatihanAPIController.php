@@ -254,4 +254,37 @@ class PelatihanAPIController extends Controller
             ],
         ], 201);
     }
+
+    public function checkStatus($registrationCode)
+    {
+        $participant = PelatihanParticipant::with('pelatihan')
+            ->where('registration_code', trim($registrationCode))
+            ->first();
+
+        if (!$participant) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode pendaftaran tidak ditemukan.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'registration_code' => $participant->registration_code,
+                'full_name'         => $participant->full_name,
+                'email'             => $participant->email,
+                'event'             => $participant->pelatihan ? $participant->pelatihan->title : '-',
+                'original_price'    => (float) $participant->original_price,
+                'final_price'       => (float) $participant->final_price,
+                'discount_amount'   => (float) $participant->discount_amount,
+                'potongan_didapat'  => (float) $participant->discount_amount,
+                'status'            => $participant->status,
+                'admin_note'        => $participant->admin_note,
+                'certificate_file'  => $participant->certificate_file ? asset('storage/certificates/' . $participant->certificate_file) : null,
+                'certificate_sent_at'=> $participant->certificate_sent_at,
+                'sertifikat_dikirim'=> !empty($participant->certificate_sent_at),
+            ],
+        ]);
+    }
 }

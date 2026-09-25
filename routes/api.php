@@ -131,3 +131,4 @@ Route::get('/pelatihan', [PelatihanAPIController::class, 'index'])->name('pelati
 Route::get('/pelatihan/{slug}', [PelatihanAPIController::class, 'show'])->name('pelatihan.show');
 Route::post('/pelatihan/check-referral', [PelatihanAPIController::class, 'checkReferral'])->name('pelatihan.check-referral');
 Route::post('/pelatihan/daftar', [PelatihanAPIController::class, 'register'])->name('pelatihan.register');
+Route::get('/pelatihan/cek-status/{code}', [PelatihanAPIController::class, 'checkStatus'])->name('pelatihan.check-status');
