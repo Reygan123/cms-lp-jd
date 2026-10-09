@@ -65,16 +65,4 @@ class Partner extends Model
     {
         return $query->where('level', $level);
     }
-
-    /**
-     * image
-     *
-     * @return Attribute
-     */
-    protected function image(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? asset('/storage/partners/' . $value) : null,
-        );
-    }
 }
