@@ -39,7 +39,7 @@
             @foreach($partners as $partner)
             <div class="swiper-slide">
                 <div class="image">
-                    <img src="{{asset('storage/partners/'.$partner->image)}}" alt="clients-logo" class="img-fluid" />
+                    <img src="{{ Str::startsWith($partner->image, 'http') ? $partner->image : asset('storage/partners/'.$partner->image) }}" alt="clients-logo" class="img-fluid" />
                 </div>
             </div>
             @endforeach

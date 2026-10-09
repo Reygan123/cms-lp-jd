@@ -16,9 +16,17 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::oldest()->when(request()->q, function($partners) {
-            $partners = $partners->where('name', 'like', '%'. request()->q . '%');
-        })->paginate(10);
+        $partners = Partner::latest()
+            ->when(request()->q, function($query) {
+                $query->where('name', 'like', '%'. request()->q . '%');
+            })
+            ->when(request()->category, function($query) {
+                $query->where('category', request()->category);
+            })
+            ->when(request()->level, function($query) {
+                $query->where('level', request()->level);
+            })
+            ->paginate(10);
 
         $headers = Header::where('id', '=', '15')->get();
 

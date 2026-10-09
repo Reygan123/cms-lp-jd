@@ -771,6 +771,20 @@ class APIController extends Controller
      *         required=false,
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         description="Filter berdasarkan kategori (contoh: sekolah, corporate, kampus, komunitas)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="level",
+     *         in="query",
+     *         description="Filter berdasarkan jenjang/level (contoh: SMK, SMA, MA, SMP)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Berhasil mengambil daftar Partner"
@@ -790,10 +804,19 @@ class APIController extends Controller
             });
         }
 
-        // Misal urutkan berdasarkan created_at terbaru
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+
+        // Urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $partners = $query->paginate(10); // paginate ada di Query Builder
+        $perPage = $request->get('per_page', 10);
+        $partners = $query->paginate($perPage);
 
         return response()->json($partners, 200);
     }
