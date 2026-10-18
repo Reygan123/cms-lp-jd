@@ -41,5 +41,14 @@ return [
         'wa_group_link' => env('PELATIHAN_WA_GROUP_LINK', ''),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model'   => env('GEMINI_MODEL', 'gemini-2.5-flash'),
+    ],
+
+    'proposal' => [
+        'admin_wa' => env('PROPOSAL_ADMIN_WA', '081234567890'),
+    ],
+
 ];
 

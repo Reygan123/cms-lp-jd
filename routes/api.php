@@ -132,3 +132,6 @@ Route::get('/pelatihan/{slug}', [PelatihanAPIController::class, 'show'])->name('
 Route::post('/pelatihan/check-referral', [PelatihanAPIController::class, 'checkReferral'])->name('pelatihan.check-referral');
 Route::post('/pelatihan/daftar', [PelatihanAPIController::class, 'register'])->name('pelatihan.register');
 Route::get('/pelatihan/cek-status/{code}', [PelatihanAPIController::class, 'checkStatus'])->name('pelatihan.check-status');
+
+// Proposal Request (Public Leads from Landing Page)
+Route::post('/proposal/request', [ProposalAPIController::class, 'requestProposal'])->name('proposal.request');

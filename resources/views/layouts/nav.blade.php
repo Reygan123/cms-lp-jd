@@ -151,6 +151,14 @@
                 </ul>
             </li>
 
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-file-document-edit-outline"></i><span
+                        class="nav-text">Proposal</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('admin.proposal.index') }}">Daftar Permohonan</a></li>
+                    <li><a href="{{ route('admin.proposal.create') }}">+ Buat Proposal Baru</a></li>
+                </ul>
+            </li>
+
             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-widgets"></i><span
                         class="nav-text">Features</span></a>
                 <ul aria-expanded="false">

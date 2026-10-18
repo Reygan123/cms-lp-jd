@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PelatihanController;
 use App\Http\Controllers\Admin\PelatihanReferralController;
 use App\Http\Controllers\Admin\PelatihanParticipantController;
 use App\Http\Controllers\Admin\PelatihanBundleController;
+use App\Http\Controllers\Admin\ProposalController;
 
 
 Route::get('/salaam', function () {
@@ -326,6 +327,16 @@ Route::prefix('admin')->group(function () {
             Route::get('/bundle/{bundleId}/edit', [PelatihanBundleController::class, 'edit'])->name('admin.pelatihan.bundle.edit');
             Route::put('/bundle/{bundleId}', [PelatihanBundleController::class, 'update'])->name('admin.pelatihan.bundle.update');
             Route::delete('/bundle/{bundleId}', [PelatihanBundleController::class, 'destroy'])->name('admin.pelatihan.bundle.destroy');
+        });
+
+        // Proposal Generator routes
+        Route::get('/proposal/export-report', [ProposalController::class, 'exportReport'])->name('admin.proposal.export-report');
+        Route::resource('/proposal', ProposalController::class, ['as' => 'admin']);
+        Route::prefix('proposal/{proposal}')->group(function () {
+            Route::post('/generate-ai', [ProposalController::class, 'generateAi'])->name('admin.proposal.generate-ai');
+            Route::get('/preview-pdf', [ProposalController::class, 'previewPdf'])->name('admin.proposal.preview-pdf');
+            Route::get('/download-pdf', [ProposalController::class, 'downloadPdf'])->name('admin.proposal.download-pdf');
+            Route::post('/send-email', [ProposalController::class, 'sendEmail'])->name('admin.proposal.send-email');
         });
     });
 });
