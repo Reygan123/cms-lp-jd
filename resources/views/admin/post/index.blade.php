@@ -49,7 +49,10 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                @if ($post->image && file_exists(public_path('storage/posts/' . $post->image)))
+                                                @if (filter_var($post->image, FILTER_VALIDATE_URL) || \Illuminate\Support\Str::startsWith($post->image, ['http://', 'https://']))
+                                                    <img src="{{ $post->image }}"
+                                                        alt="{{ $post->title }}" class="admin-index-image">
+                                                @elseif ($post->image && file_exists(public_path('storage/posts/' . $post->image)))
                                                     <img src="{{ asset('storage/posts/' . $post->image) }}"
                                                         alt="{{ $post->title }}" class="admin-index-image">
                                                 @else

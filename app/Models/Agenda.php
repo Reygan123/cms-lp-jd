@@ -10,6 +10,7 @@ use Carbon\Carbon;
 class Agenda extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     /**
      * fillable

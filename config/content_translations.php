@@ -1,0 +1,38 @@
+<?php
+
+use App\Models;
+
+return [
+    'frontend_copies' => [Models\FrontendCopy::class, ['source']],
+    'posts' => [Models\Post::class, ['title', 'description', 'content']],
+    'categories' => [Models\Category::class, ['name']],
+    'agendas' => [Models\Agenda::class, ['title', 'agendacat', 'content', 'location']],
+    'programs' => [Models\Program::class, ['name', 'title1', 'description1', 'title2', 'description2', 'title3', 'description3', 'title4', 'description4', 'age', 'weekly', 'periode', 'time_table', 'time_table2', 'content', 'cta']],
+    'facilities' => [Models\Facility::class, ['title', 'subtitle', 'description']],
+    'unggulans' => [Models\Unggulan::class, ['title', 'description']],
+    'pricings' => [Models\Pricing::class, ['title', 'description']],
+    'benefits' => [Models\Benefit::class, ['title', 'description']],
+    'testimonies' => [Models\Testimony::class, ['title', 'description']],
+    'portofolios' => [Models\Portofolio::class, ['title', 'description']],
+    'dukungans' => [Models\Dukungan::class, ['title', 'jabatan']],
+    'partners' => [Models\Partner::class, ['description', 'program_desc']],
+    'legals' => [Models\Legal::class, ['title', 'description']],
+    'ourteams' => [Models\Ourteam::class, ['title']],
+    'sliders' => [Models\Slider::class, ['title', 'description', 'button']],
+    'identities' => [Models\Identity::class, ['description', 'day_service']],
+    'faqs' => [Models\Faq::class, ['title', 'description']],
+    'welcomechats' => [Models\Welcomechat::class, ['greating']],
+    'services' => [Models\Service::class, ['name', 'title1', 'description1', 'title2', 'description2', 'title3', 'description3', 'title4', 'description4']],
+    'why_services' => [Models\WhyService::class, ['title', 'description']],
+    'alasanservices' => [Models\AlasanService::class, ['title', 'description']],
+    'how_services' => [Models\HowService::class, ['title', 'description']],
+    'bonus_services' => [Models\BonusService::class, ['title', 'description']],
+    'masalah_services' => [Models\MasalahService::class, ['title', 'description']],
+    'manfaat_services' => [Models\ManfaatService::class, ['title', 'description']],
+    'activities' => [Models\Activity::class, ['title', 'description']],
+    'pelatihans' => [Models\Pelatihan::class, ['title', 'description', 'location']],
+    'pelatihan_bundles' => [Models\PelatihanBundle::class, ['name', 'description']],
+    'pelatihan_questions' => [Models\PelatihanQuestion::class, ['question', 'options']],
+    'webinars' => [Models\Webinar::class, ['title', 'description', 'speaker_title']],
+    'webinar_episodes' => [Models\WebinarEpisode::class, ['title', 'description', 'date_label', 'time_label', 'features']],
+];

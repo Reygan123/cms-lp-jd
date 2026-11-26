@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Identity extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
      /**
      * fillable

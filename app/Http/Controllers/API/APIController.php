@@ -76,12 +76,12 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('content', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'content', $keyword); });
             });
         }
 
-        $posts = $query->paginate(10);
+        $posts = $query->paginate(10)->appends(request()->only(['locale', 'search']));
 
         return response()->json($posts, 200);
     }
@@ -141,15 +141,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('agendacat', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'agendacat', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $posts = $query->paginate(10); // paginate ada di Query Builder
+        $posts = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($posts, 200);
     }
@@ -210,15 +210,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('description1', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'name', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description1', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $programs = $query->paginate(10); // paginate ada di Query Builder
+        $programs = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($programs, 200);
     }
@@ -278,15 +278,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'asc');
 
-        $unggulans = $query->paginate(10); // paginate ada di Query Builder
+        $unggulans = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($unggulans, 200);
     }
@@ -346,15 +346,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $assesment = $query->paginate(10); // paginate ada di Query Builder
+        $assesment = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($assesment, 200);
     }
@@ -414,16 +414,16 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%')
-                    ->orWhere('price', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); })
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'price', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $pricing = $query->paginate(10); // paginate ada di Query Builder
+        $pricing = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($pricing, 200);
     }
@@ -483,15 +483,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $benefits = $query->paginate(10); // paginate ada di Query Builder
+        $benefits = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($benefits, 200);
     }
@@ -580,16 +580,16 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'name', $keyword); })
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $testimonis = $query->paginate(10); // paginate ada di Query Builder
+        $testimonis = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($testimonis, 200);
     }
@@ -649,15 +649,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $testimonis = $query->paginate(10); // paginate ada di Query Builder
+        $testimonis = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($testimonis, 200);
     }
@@ -717,15 +717,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('name', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'name', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $supports = $query->paginate(10); // paginate ada di Query Builder
+        $supports = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($supports, 200);
     }
@@ -799,8 +799,8 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'name', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
@@ -876,15 +876,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'name', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $legals = $query->paginate(10); // paginate ada di Query Builder
+        $legals = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($legals, 200);
     }
@@ -944,15 +944,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'name', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'asc');
 
-        $ourteams = $query->paginate(10); // paginate ada di Query Builder
+        $ourteams = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($ourteams, 200);
     }
@@ -1012,15 +1012,15 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('title', 'like', '%' . $keyword . '%')
-                    ->orWhere('description', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'title', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'description', $keyword); });
             });
         }
 
         // Misal urutkan berdasarkan created_at terbaru
         $query->orderBy('created_at', 'desc');
 
-        $sliders = $query->paginate(10); // paginate ada di Query Builder
+        $sliders = $query->paginate(10)->appends(request()->only(['locale', 'search'])); // paginate ada di Query Builder
 
         return response()->json($sliders, 200);
     }
@@ -1139,9 +1139,9 @@ class APIController extends Controller
             $keyword = $request->search;
 
             $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', '%' . $keyword . '%')
-                    ->orWhere('title1', 'like', '%' . $keyword . '%')
-                    ->orWhere('title2', 'like', '%' . $keyword . '%');
+                \App\Support\ContentTranslation::whereLike($q, 'name', $keyword, 'and')
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'title1', $keyword); })
+                    ->orWhere(function ($translatedQuery) use ($keyword) { \App\Support\ContentTranslation::whereLike($translatedQuery, 'title2', $keyword); });
             });
         }
 

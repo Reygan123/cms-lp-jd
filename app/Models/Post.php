@@ -11,6 +11,7 @@ use Carbon\Carbon;
 class Post extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     /**
      * fillable

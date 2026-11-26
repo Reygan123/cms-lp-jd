@@ -50,6 +50,9 @@ Route::prefix('admin')->group(function () {
 
     //group route with middleware "auth"
     Route::group(['middleware' => 'auth'], function () {
+        Route::get('/translations', [ContentTranslationController::class, 'index'])->name('admin.translations.index');
+        Route::get('/translations/{resource}/{id}', [ContentTranslationController::class, 'edit'])->name('admin.translations.edit');
+        Route::put('/translations/{resource}/{id}', [ContentTranslationController::class, 'update'])->name('admin.translations.update');
 
         // Setting
         //route user profile
@@ -337,6 +340,15 @@ Route::prefix('admin')->group(function () {
             Route::get('/preview-pdf', [ProposalController::class, 'previewPdf'])->name('admin.proposal.preview-pdf');
             Route::get('/download-pdf', [ProposalController::class, 'downloadPdf'])->name('admin.proposal.download-pdf');
             Route::post('/send-email', [ProposalController::class, 'sendEmail'])->name('admin.proposal.send-email');
+        });
+
+        Route::get('/webinar/registrations', [\App\Http\Controllers\Admin\WebinarController::class, 'registrations'])->name('admin.webinar.registrations');
+        Route::post('/webinar/registrations/{id}/mark-paid', [\App\Http\Controllers\Admin\WebinarController::class, 'markRegistrationPaid'])->name('admin.webinar.registrations.mark-paid');
+        Route::resource('/webinar', \App\Http\Controllers\Admin\WebinarController::class, ['as' => 'admin']);
+        Route::prefix('webinar/{webinarId}')->group(function () {
+            Route::post('/episode', [\App\Http\Controllers\Admin\WebinarController::class, 'storeEpisode'])->name('admin.webinar.episode.store');
+            Route::put('/episode/{episodeId}', [\App\Http\Controllers\Admin\WebinarController::class, 'updateEpisode'])->name('admin.webinar.episode.update');
+            Route::delete('/episode/{episodeId}', [\App\Http\Controllers\Admin\WebinarController::class, 'destroyEpisode'])->name('admin.webinar.episode.destroy');
         });
     });
 });

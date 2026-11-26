@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Facility extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     /**
      * fillable

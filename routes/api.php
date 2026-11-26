@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PelatihanAPIController;
+use App\Http\Controllers\API\WebinarAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,3 +136,12 @@ Route::get('/pelatihan/cek-status/{code}', [PelatihanAPIController::class, 'chec
 
 // Proposal Request (Public Leads from Landing Page)
 Route::post('/proposal/request', [ProposalAPIController::class, 'requestProposal'])->name('proposal.request');
+
+Route::get('/webinar/active', [WebinarAPIController::class, 'getActiveWebinar'])->name('webinar.active');
+Route::post('/webinar/register', [WebinarAPIController::class, 'register'])->name('webinar.register');
+Route::get('/webinar/payment/status/{orderId}', [WebinarAPIController::class, 'checkStatus'])->name('webinar.payment.status');
+Route::post('/webinar/payment/callback', [WebinarAPIController::class, 'callback'])->name('webinar.payment.callback');
+Route::get('/webinar/admin/transactions', [WebinarAPIController::class, 'getAdminTransactions'])->name('webinar.admin.transactions');
+Route::post('/webinar/admin/transactions/{orderId}/mark-paid', [WebinarAPIController::class, 'markPaid'])->name('webinar.admin.mark-paid');
+
+Route::get('/content-translations/frontend', FrontendTranslationController::class);

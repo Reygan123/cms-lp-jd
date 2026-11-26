@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class Partner extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     /**
      * Daftar Kategori Partner

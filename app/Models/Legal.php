@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Legal extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
      /**
      * fillable

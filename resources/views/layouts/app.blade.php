@@ -66,6 +66,9 @@
         @include('layouts.header')
         @include('layouts.nav')
         <div class="content-body">
+            @unless(request()->is('admin/translations*'))
+                @include('admin.translations.link')
+            @endunless
             @yield('content')
         </div>
         @include('layouts.footer')

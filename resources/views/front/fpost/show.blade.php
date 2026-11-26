@@ -13,7 +13,7 @@
                             <div class="post blog-classic">
                                 <div class="pbmit-featured-img-wrapper">
                                     <div class="pbmit-featured-wrapper">
-                                        <img src="{{asset('/storage/posts/'.$post->image)}}" class="img-fluid" alt="">
+                                        <img src="{{ (filter_var($post->image, FILTER_VALIDATE_URL) || \Illuminate\Support\Str::startsWith($post->image, ['http://', 'https://'])) ? $post->image : asset('/storage/posts/'.$post->image) }}" class="img-fluid" alt="">
                                     </div>
                                     <span class="pbmit-meta pbmit-meta-cat">
                                         <a href="{{route('post.post.index',['category'=>$post->category->slug])}}"

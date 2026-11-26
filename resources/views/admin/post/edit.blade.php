@@ -99,13 +99,16 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            @if ($post->image && file_exists(public_path('storage/posts/' . $post->image)))
-                                                    <img src="{{ asset('storage/posts/' . $post->image) }}"
-                                                        alt="{{ $post->title }}" class="admin-edit-image">
-                                                @else
-                                                    <img src="{{ asset('storage/identities/no_image.jpg') }}"
-                                                        class="admin-edit-image">
-                                                @endif
+                                            @if (filter_var($post->image, FILTER_VALIDATE_URL) || \Illuminate\Support\Str::startsWith($post->image, ['http://', 'https://']))
+                                                <img src="{{ $post->image }}"
+                                                    alt="{{ $post->title }}" class="admin-edit-image">
+                                            @elseif ($post->image && file_exists(public_path('storage/posts/' . $post->image)))
+                                                <img src="{{ asset('storage/posts/' . $post->image) }}"
+                                                    alt="{{ $post->title }}" class="admin-edit-image">
+                                            @else
+                                                <img src="{{ asset('storage/identities/no_image.jpg') }}"
+                                                    class="admin-edit-image">
+                                            @endif
                                         </div>
                                     </div>
 

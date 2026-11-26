@@ -26,6 +26,7 @@ class PelatihanAPIController extends Controller
                 return [
                     'id'                => $p->id,
                     'title'             => $p->title,
+                    '_translation'      => $p->_translation,
                     'slug'              => $p->slug,
                     'batch'             => $p->batch,
                     'description'       => $p->description,
@@ -74,8 +75,10 @@ class PelatihanAPIController extends Controller
             return [
                 'id'                      => $q->id,
                 'question'                => $q->question,
+                '_translation' => $q->_translation,
                 'type'                    => $q->type,
                 'options'                 => $q->options,
+                'option_labels'           => $q->option_labels,
                 'is_required'             => $q->is_required,
                 'sort_order'              => $q->sort_order,
                 'conditional_on_question' => $q->conditional_on_question,
@@ -91,6 +94,7 @@ class PelatihanAPIController extends Controller
                 'bundle_price'    => (float) $b->bundle_price,
                 'price_per_person'=> $b->price_per_person,
                 'description'     => $b->description,
+                '_translation'    => $b->_translation,
             ];
         });
 
@@ -99,6 +103,7 @@ class PelatihanAPIController extends Controller
             'data'    => [
                 'id'               => $pelatihan->id,
                 'title'            => $pelatihan->title,
+                '_translation' => $pelatihan->_translation,
                 'slug'             => $pelatihan->slug,
                 'batch'            => $pelatihan->batch,
                 'description'      => $pelatihan->description,

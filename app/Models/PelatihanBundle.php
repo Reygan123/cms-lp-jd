@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PelatihanBundle extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     protected $fillable = [
         'pelatihan_id',

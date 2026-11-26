@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WhyService extends Model
 {
     use HasFactory;
+    use \App\Models\Concerns\HasContentTranslations;
 
     protected $fillable = [
         'image',

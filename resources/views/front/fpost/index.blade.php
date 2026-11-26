@@ -15,7 +15,7 @@
                                 <div class="pbmit-featured-container">
                                     <div class="pbmit-featured-img-wrapper">
                                         <div class="pbmit-featured-wrapper">
-                                            <img src="{{asset('/storage/posts/'.$a->image)}}" class="img-fluid" alt="{{$a->title}}">
+                                            <img src="{{ (filter_var($a->image, FILTER_VALIDATE_URL) || \Illuminate\Support\Str::startsWith($a->image, ['http://', 'https://'])) ? $a->image : asset('/storage/posts/'.$a->image) }}" class="img-fluid" alt="{{$a->title}}">
                                         </div>
                                     </div>
                                     <a class="pbmit-blog-btn" href="{{route('post.post.show',$a->slug)}}">

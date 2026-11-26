@@ -1,5 +1,6 @@
 {{-- <nav class="mt-5">
 <div class="accordion accordion-program d-none d-sm-block" id="accordionExample">
+  <div class="p-3"><a href="{{ route('admin.translations.index') }}">Terjemahan ID / EN</a></div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
       <button class="accordion-button1 ">
@@ -148,6 +149,15 @@
                         class="nav-text">Pelatihan</span></a>
                 <ul aria-expanded="false">
                     <li><a href="{{ route('admin.pelatihan.index') }}">Daftar Pelatihan</a></li>
+                </ul>
+            </li>
+
+            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="mdi mdi-video-vintage"></i><span
+                        class="nav-text">Webinar</span></a>
+                <ul aria-expanded="false">
+                    <li><a href="{{ route('admin.webinar.index') }}">Daftar Webinar & Episode</a></li>
+                    <li><a href="{{ route('admin.webinar.create') }}">+ Tambah Webinar</a></li>
+                    <li><a href="{{ route('admin.webinar.registrations') }}">Data Pendaftar / Transaksi</a></li>
                 </ul>
             </li>
 
